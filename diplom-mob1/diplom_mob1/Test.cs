@@ -23,6 +23,8 @@ namespace diplom_mob1
         string WebImage = "";
         int i = 7;
 
+        //
+
         public Test()
         {
             LabelNameTest = new Label
