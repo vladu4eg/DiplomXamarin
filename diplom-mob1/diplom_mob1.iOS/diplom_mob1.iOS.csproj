@@ -92,6 +92,7 @@
     <Compile Include="AppDelegate.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
+    <Compile Include="MySQL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <ITunesArtwork Include="iTunesArtwork" />
     <ITunesArtwork Include="iTunesArtwork@2x" />
@@ -116,7 +117,12 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="I18N.West" />
+    <Reference Include="MySql.Data.CF">
+      <HintPath>..\..\Components\MySQL-Plugin-1.0\lib\ios-unified\MySql.Data.CF.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -134,6 +140,10 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\diplom_mob1.Android\diplom_mob1.Android.csproj">
+      <Project>{05D99166-68C2-4F22-B86F-15963E1CB6CF}</Project>
+      <Name>diplom_mob1.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\diplom_mob1\diplom_mob1.csproj">
       <Project>{c5b7c166-eb30-4310-92e3-b1e790e6c960}</Project>
       <Name>diplom_mob1</Name>
