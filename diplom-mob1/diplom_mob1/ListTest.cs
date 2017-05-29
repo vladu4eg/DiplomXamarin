@@ -13,21 +13,24 @@ namespace diplom_mob1
         public ListTest()
         {
             var listView = new ListView();
+
+            Label header = new Label
+            {
+                Text = "Список моделей",
+            };
+
+
             listView.ItemsSource = App.Database.GetItems();
 
             StackLayout stackLayout = new StackLayout
             {
                 Children =
                 {
+                header,
                 listView,
-
                 }
             };
-        }
-        protected override void OnAppearing()
-        {
-
-            base.OnAppearing();
+            this.Content = stackLayout;
         }
     }
 }
