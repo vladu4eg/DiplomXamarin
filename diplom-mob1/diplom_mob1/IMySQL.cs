@@ -11,6 +11,9 @@ namespace diplom_mob1
     {
         Task<string> GetAccountAuth(string login, string pass);
         Task<List<string>> GetTakeTest();
+        Task<List<string>> GetTakeTask();
+        Task<List<string>> GetNameId(int idtest);
+        void PutAnswerTest(float ocenka, int answer, string[] answer_task);
     }
 
 }

@@ -12,7 +12,7 @@ namespace diplom_mob1
     {
         Button btnTakeTest, btnTest, btnResultTest;
         Label LabelError;
-        static public int idTest;
+        static public int idTest, idStudent;
 
         public Student()
         {
@@ -57,7 +57,7 @@ namespace diplom_mob1
         }
         private async void OnButtonClickedResultTest(object sender, System.EventArgs e)
         {
-            await Navigation.PushModalAsync(new ResultTest());
+            await Navigation.PushModalAsync(new ListTest());
         }
     }
 }

@@ -22,6 +22,8 @@ namespace diplom_mob1
 
             //qr start
 
+            List<String> ListNameId = new List<String>();
+
             zxing = new ZXingScannerView
             {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -34,7 +36,20 @@ namespace diplom_mob1
                     zxing.IsAnalyzing = false;
 
                     // Take SQL
-                    Student.idTest = Convert.ToInt32(result.Text);
+                    //Student.idTest = Convert.ToInt32(result.Text);
+
+                   
+
+                    ListNameId = await DependencyService.Get<IMySQL>().GetNameId(Convert.ToInt32(result.Text));
+
+                    NameId nameid = new NameId();
+
+                    nameid.Id = Convert.ToInt32(ListNameId[0]);
+                    nameid.Name = ListNameId[1];
+                    nameid.Pdf = ListNameId[2];
+
+                    App.Database.SaveItem(nameid);
+
                     //display
                     //await DisplayAlert("Scanned Barcode", result.Text + " == " + Student.idTest, "OK");
                     // Navigate away

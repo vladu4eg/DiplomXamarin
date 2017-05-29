@@ -64,7 +64,11 @@ namespace diplom_mob1
         }
         private async void OnButtonClickedLogin(object sender, System.EventArgs e)
         {
-            LabelError.Text = await DependencyService.Get<IMySQL>().GetAccountAuth(loginEntry.Text, passwordEntry.Text);
+            //не работает проверка на пустое поле
+            if (loginEntry.Text != String.Empty && passwordEntry.Text != String.Empty)
+                LabelError.Text = await DependencyService.Get<IMySQL>().GetAccountAuth(loginEntry.Text, passwordEntry.Text);
+            else LabelError.Text = "Введите логин и пароль!";
+
             if (AuthStudent == true)
             {
                 AuthStudent = false;

@@ -17,11 +17,15 @@ namespace diplom_mob1
         Label LabelNameVopros, LabelError, LabelNameTest;
         SwitchCell var1, var2, var3, var4;
         TableView Variant;
-        List<String> products = new List<String>();
+        List<String> VoprosList = new List<String>();
+        List<String> TaskList = new List<String>();
 
-        int TrueAnswer = 0, Answer = 0;
+        int TrueAnswer = 0, Answer = 0, TakeAnswer = 0;
+        float Ocenka = 0F;
         string WebImage = "";
-        int i = 7;
+        int i = 7, y = 0, z = 0;
+        string[] TextAnswer;
+        static public bool TheTaskIs = false;
 
         //
 
@@ -55,6 +59,11 @@ namespace diplom_mob1
                 Text = "Закончить тестирование",
             };
 
+
+            AnswerTask = new Entry
+            {
+                IsVisible = false,
+            };
 
             Variant = new TableView
             {
@@ -129,6 +138,7 @@ namespace diplom_mob1
                     LabelNameVopros,
                     webImage,
                     Variant,
+                    AnswerTask,
                     btnPutTestAnswer,
                     btnStopTestAnswer,
                     LabelError,
@@ -148,37 +158,69 @@ namespace diplom_mob1
             btnStopTestAnswer.Clicked += OnButtonClickedStopTestAnswer;
         }
 
-        private async void TakeTest()
+        public async void TakeTest()
         {
-            products = await DependencyService.Get<IMySQL>().GetTakeTest();
-            LabelNameVopros.Text = products[0];
-            var1.Text = products[1];
-            var2.Text = products[2];
-            var3.Text = products[3];
-            var4.Text = products[4];
-            TrueAnswer = Convert.ToInt32(products[5]);
-            WebImage = products[6];
+            VoprosList = await DependencyService.Get<IMySQL>().GetTakeTest();
+            TaskList = await DependencyService.Get<IMySQL>().GetTakeTask();
+            LabelNameVopros.Text = VoprosList[0];
+            var1.Text = VoprosList[1];
+            var2.Text = VoprosList[2];
+            var3.Text = VoprosList[3];
+            var4.Text = VoprosList[4];
+            TrueAnswer = Convert.ToInt32(VoprosList[5]);
+            WebImage = VoprosList[6];
+            if (TaskList.Count < 2)
+            {
+                TheTaskIs = true;
+                TextAnswer = new string[TaskList.Count / 2];
+            }
+
         }
 
         private void OnButtonClickedPutTestAnswer(object sender, EventArgs e)
         {
             if (TrueAnswer == Answer)
-                LabelError.Text = "Ты выиграл миллион";
+            {
+                TakeAnswer++;
+            }
+
             else if (Answer == 0)
                 LabelError.Text = "Нужно выбрать ответ!";
             else
                 LabelError.Text = "Ты поиграл";
 
-            if (products.Count > i)
+
+            if (VoprosList.Count > i)
             {
-                LabelNameVopros.Text = products[0 + i];
-                var1.Text = products[1 + i];
-                var2.Text = products[2 + i];
-                var3.Text = products[3 + i];
-                var4.Text = products[4 + i];
-                TrueAnswer = Convert.ToInt32(products[5 + i]);
-                WebImage = products[6];
+                LabelNameVopros.Text = VoprosList[0 + i];
+                var1.Text = VoprosList[1 + i];
+                var2.Text = VoprosList[2 + i];
+                var3.Text = VoprosList[3 + i];
+                var4.Text = VoprosList[4 + i];
+                TrueAnswer = Convert.ToInt32(VoprosList[5 + i]);
+                WebImage = VoprosList[6];
                 i += 7;
+            }
+            else
+            {
+                btnPutTestAnswer.Text = "Решить задачу!";
+                if (TaskList.Count > y && TheTaskIs)
+                {
+                    LabelNameVopros.Text = TaskList[0 + y];
+                    WebImage = VoprosList[1 + y];
+                    Variant.IsVisible = false;
+                    AnswerTask.IsVisible = true;
+                    y += 2;
+                    TextAnswer[z] = AnswerTask.Text;
+                    z++;
+                }
+                else
+                {
+                    btnPutTestAnswer.Text = "Закончить тестирование!";
+                    Ocenka = (TakeAnswer * 5) / (VoprosList.Count / 7);
+                    DependencyService.Get<IMySQL>().PutAnswerTest(Ocenka, TakeAnswer, TextAnswer);
+                }
+
             }
         }
         private async void OnButtonClickedStopTestAnswer(object sender, EventArgs e)
