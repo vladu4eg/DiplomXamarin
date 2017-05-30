@@ -14,6 +14,7 @@ using Android.Widget;
 using MySql.Data.MySqlClient;
 using Xamarin.Forms;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 [assembly: Dependency(typeof(diplom_mob1.Droid.MySQL))]
 namespace diplom_mob1.Droid
@@ -57,12 +58,12 @@ namespace diplom_mob1.Droid
                 string LoginGlobal = (string)myCommand.ExecuteScalar();//результат запроса
                 if (LoginGlobal == login)
                 {
-                    MainPage.AuthStudent = true;
                     myCommand.CommandText = string.Format("SELECT id FROM Student WHERE login='{0}'", login);//запрос: если есть такой логин в таблице
                     myCommand.Prepare();//подготавливает строку
                     myCommand.ExecuteNonQuery();//выполняет запрос
                     Student.idStudent = (int)myCommand.ExecuteScalar();//результат запроса
                     myConnection.Close();
+                    MainPage.AuthStudent = true;
                     return await Task<string>.FromResult("Вы зашли как студент");
                 }
 
@@ -74,8 +75,8 @@ namespace diplom_mob1.Droid
                     LoginGlobal = (string)myCommand.ExecuteScalar();//результат запроса
                     if (LoginGlobal == login)
                     {
-                        MainPage.AuthTeacher = true;
                         myConnection.Close();
+                        MainPage.AuthTeacher = true;
                         return await Task<string>.FromResult("Вы зашли как преподаватель");
                     }
 
@@ -130,6 +131,37 @@ namespace diplom_mob1.Droid
                 return await Task<List<String>>.FromResult(vopros);
         }
 
+
+        public async Task<List<string>> GetTakeNameTest()
+        {
+            List<string> vopros = new List<string>();
+            try
+            {
+                string connsqlstring = "Database=u0354899_diplom;Data Source=31.31.196.162;User Id=u0354899_vlad;Password=vlad19957;charset=utf8";
+                MySqlConnection sqlconn = new MySqlConnection(connsqlstring);
+                sqlconn.Open();
+
+                DataSet tickets = new DataSet();
+                string queryString = string.Format("SELECT tests.id,tests.NameTest,tests.pdf FROM tests,StudentTakeTest WHERE StudentTakeTest.idtest=tests.id AND StudentTakeTest.idstudent = '{0}'", Student.idStudent);
+                MySqlDataAdapter adapter = new MySqlDataAdapter(queryString, sqlconn);
+                adapter.Fill(tickets, "Item");
+
+                foreach (DataRow row in tickets.Tables["Item"].Rows)
+                {
+                    vopros.Add(row[0].ToString());
+                    vopros.Add(row[1].ToString());
+                    vopros.Add(row[2].ToString());
+                }
+
+                sqlconn.Close();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message);
+            }
+            return await Task<List<string>>.FromResult(vopros);
+        }
+
         public void PutAnswerTest(float ocenka, int answer, string[] answer_task)
         {
             try
@@ -154,6 +186,27 @@ namespace diplom_mob1.Droid
                     }
 
                 }
+                myConnection.Close();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message);
+            }
+        }
+
+        public void PutTakeStudentTest(int idtest, int idstudent)
+        {
+            try
+            {
+                new I18N.West.CP1250();
+                string Connect = "Database=u0354899_diplom;Data Source=31.31.196.162;User Id=u0354899_vlad;Password=vlad19957;charset=utf8";
+                MySql.Data.MySqlClient.MySqlConnection myConnection = new MySql.Data.MySqlClient.MySqlConnection(Connect);
+                MySql.Data.MySqlClient.MySqlCommand myCommand = new MySql.Data.MySqlClient.MySqlCommand();
+                myConnection.Open();
+                myCommand.Connection = myConnection;
+                myCommand.CommandText = string.Format("INSERT INTO StudentTakeTest (idtest,idstudent) VALUES ('{0}','{1}')", Student.idTest, Student.idStudent);//запрос: если есть такой логин в таблице
+                myCommand.Prepare();//подготавливает строку
+                myCommand.ExecuteNonQuery();//выполняет запрос
                 myConnection.Close();
             }
             catch (Exception e)
@@ -193,9 +246,11 @@ namespace diplom_mob1.Droid
             return await Task<List<String>>.FromResult(ListNameId);
         }
 
-        public async Task<List<String>> GetTakeTask()
+
+
+        public async Task<List<string>> GetTakeTask()
         {
-            List<String> task = new List<String>();
+            List<string> task = new List<string>();
             try
             {
                 string connsqlstring = "Database=u0354899_diplom;Data Source=31.31.196.162;User Id=u0354899_vlad;Password=vlad19957;charset=utf8";
@@ -220,7 +275,7 @@ namespace diplom_mob1.Droid
             {
                 Console.Write(e.Message);
             }
-            return await Task<List<String>>.FromResult(task);
+            return await Task<List<string>>.FromResult(task);
         }
     }
 }

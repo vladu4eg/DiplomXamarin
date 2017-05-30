@@ -24,11 +24,27 @@ namespace diplom_mob1
             }
 
         }
-        public IEnumerable<NameId> GetItems()
+        public List<NameId> GetItems()
         {
             return (from i in database.Table<NameId>() select i).ToList();
 
         }
+
+        public List<NameId> GetName(int idstudent)
+        {
+            try
+            {
+                string txtSQLQuery = string.Format("select Name where IdStudent = '{1}'", idstudent);
+                return database.Query<NameId>(txtSQLQuery);
+            }
+            catch(Exception ex)
+            {
+                string txtSQLQuery = string.Format("select Name where IdStudent = '{1}'", idstudent);
+                return database.Query<NameId>(txtSQLQuery);
+            }
+
+        }
+
         public NameId GetItem(int id)
         {
             return database.Get<NameId>(id);
@@ -41,8 +57,17 @@ namespace diplom_mob1
         {
             if (item.Id != 0)
             {
-                database.Update(item);
-                return item.Id;
+                try
+                {
+                    database.Update(item);
+                    return item.Id;
+                }
+                catch(Exception ex)
+                {
+                     Debug.WriteLine(ex.Message);
+                    int i = 0;
+                    return i;
+                }
             }
             else
             {

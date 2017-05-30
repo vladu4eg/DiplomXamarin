@@ -17,23 +17,22 @@ namespace diplom_mob1
         Label LabelNameVopros, LabelError, LabelNameTest;
         SwitchCell var1, var2, var3, var4;
         TableView Variant;
+        Image webImage;
+
         List<String> VoprosList = new List<String>();
         List<String> TaskList = new List<String>();
 
         int TrueAnswer = 0, Answer = 0, TakeAnswer = 0;
         float Ocenka = 0F;
-        string WebImage = "";
         int i = 7, y = 0, z = 0;
         string[] TextAnswer;
         static public bool TheTaskIs = false;
-
-        //
 
         public Test()
         {
             LabelNameTest = new Label
             {
-                Text = "Название вопроса",
+                Text = Student.NameTest,
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
             };
 
@@ -82,8 +81,8 @@ namespace diplom_mob1
 
             };
 
-            var webImage = new Image { Aspect = Aspect.AspectFit };
-            webImage.Source = ImageSource.FromUri(new Uri("https://xamarin.com/content/images/pages/forms/example-app.png"));
+            webImage = new Image { Aspect = Aspect.AspectFit };
+            //webImage.Source = ImageSource.FromUri(new Uri("https://xamarin.com/content/images/pages/forms/example-app.png"));
 
             var1.OnChanged += (s, e) =>
             {
@@ -168,7 +167,7 @@ namespace diplom_mob1
             var3.Text = VoprosList[3];
             var4.Text = VoprosList[4];
             TrueAnswer = Convert.ToInt32(VoprosList[5]);
-            WebImage = VoprosList[6];
+            webImage.Source = ImageSource.FromUri(new Uri(VoprosList[6]));
             if (TaskList.Count < 2)
             {
                 TheTaskIs = true;
@@ -198,7 +197,7 @@ namespace diplom_mob1
                 var3.Text = VoprosList[3 + i];
                 var4.Text = VoprosList[4 + i];
                 TrueAnswer = Convert.ToInt32(VoprosList[5 + i]);
-                WebImage = VoprosList[6];
+                webImage.Source = ImageSource.FromUri(new Uri(VoprosList[6 + i]));
                 i += 7;
             }
             else
@@ -207,7 +206,7 @@ namespace diplom_mob1
                 if (TaskList.Count > y && TheTaskIs)
                 {
                     LabelNameVopros.Text = TaskList[0 + y];
-                    WebImage = VoprosList[1 + y];
+                    webImage.Source = ImageSource.FromUri(new Uri(VoprosList[2 + y]));
                     Variant.IsVisible = false;
                     AnswerTask.IsVisible = true;
                     y += 2;

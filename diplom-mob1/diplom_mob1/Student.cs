@@ -13,6 +13,7 @@ namespace diplom_mob1
         Button btnTakeTest, btnTest, btnResultTest;
         Label LabelError;
         static public int idTest, idStudent;
+        static public string NameTest;
 
         public Student()
         {
@@ -24,7 +25,7 @@ namespace diplom_mob1
             };
             btnTest = new Button
             {
-                Text = "Решить тест",
+                Text = "Выбрать тест для прохождения",
             };
             btnResultTest = new Button
             {
@@ -53,11 +54,11 @@ namespace diplom_mob1
         }
         private async void OnButtonClickedTest(object sender, System.EventArgs e)
         {
-            await Navigation.PushModalAsync(new Test());
+            await Navigation.PushModalAsync(new ListTest());
         }
         private async void OnButtonClickedResultTest(object sender, System.EventArgs e)
         {
-            await Navigation.PushModalAsync(new ListTest());
+            await Navigation.PushModalAsync(new ResultTest());
         }
     }
 }

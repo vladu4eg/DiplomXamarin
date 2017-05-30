@@ -11,7 +11,7 @@ namespace diplom_mob1.Droid
         public SqLite() { }
         public string GetDatabasePath(string sqliteFilename)
         {
-            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             var path = Path.Combine(documentsPath, sqliteFilename);
             return path;
         }

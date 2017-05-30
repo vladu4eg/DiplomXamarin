@@ -32,27 +32,11 @@ namespace diplom_mob1
             zxing.OnScanResult += (result) =>
                 Device.BeginInvokeOnMainThread(async () => {
 
-                    // Stop analysis until we navigate away so we don't keep reading barcodes
                     zxing.IsAnalyzing = false;
 
-                    // Take SQL
-                    //Student.idTest = Convert.ToInt32(result.Text);
+                    Student.idTest = Convert.ToInt32(result.Text);
+                    DependencyService.Get<IMySQL>().PutTakeStudentTest(Student.idTest, Student.idStudent);
 
-                   
-
-                    ListNameId = await DependencyService.Get<IMySQL>().GetNameId(Convert.ToInt32(result.Text));
-
-                    NameId nameid = new NameId();
-
-                    nameid.Id = Convert.ToInt32(ListNameId[0]);
-                    nameid.Name = ListNameId[1];
-                    nameid.Pdf = ListNameId[2];
-
-                    App.Database.SaveItem(nameid);
-
-                    //display
-                    //await DisplayAlert("Scanned Barcode", result.Text + " == " + Student.idTest, "OK");
-                    // Navigate away
                     await Navigation.PopModalAsync();
                 });
 

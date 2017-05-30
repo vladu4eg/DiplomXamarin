@@ -18,7 +18,7 @@ namespace diplom_mob1
         public MainPage()
         {
             Title = "Главная";
-            //InitializeComponent();
+
             StackLayout stackLayout = new StackLayout();
             Label1 = new Label
             {
@@ -65,7 +65,7 @@ namespace diplom_mob1
         private async void OnButtonClickedLogin(object sender, System.EventArgs e)
         {
             //не работает проверка на пустое поле
-            if (loginEntry.Text != String.Empty && passwordEntry.Text != String.Empty)
+            if (!String.IsNullOrEmpty(loginEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))
                 LabelError.Text = await DependencyService.Get<IMySQL>().GetAccountAuth(loginEntry.Text, passwordEntry.Text);
             else LabelError.Text = "Введите логин и пароль!";
 
@@ -80,6 +80,7 @@ namespace diplom_mob1
                 await Navigation.PushModalAsync(new Teacher());
             }
         }
+
         private async void OnButtonClickedReg(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new Registration());
