@@ -11,7 +11,6 @@ namespace diplom_mob1
     public class Student : ContentPage
     {
         Button btnTakeTest, btnTest, btnResultTest;
-        Label LabelError;
         static public int idTest, idStudent;
         static public string NameTest;
 
@@ -31,11 +30,7 @@ namespace diplom_mob1
             {
                 Text = "Результаты тестов",
             };
-            LabelError = new Label
-            {
-                Text = "Анализ ошибок",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-            };
+
 
             btnTakeTest.Clicked += OnButtonClickedTakeTest;
             btnTest.Clicked += OnButtonClickedTest;
@@ -44,7 +39,6 @@ namespace diplom_mob1
             stackLayout.Children.Add(btnTakeTest);
             stackLayout.Children.Add(btnTest);
             stackLayout.Children.Add(btnResultTest);
-            stackLayout.Children.Add(LabelError);
 
             this.Content = stackLayout;
         }

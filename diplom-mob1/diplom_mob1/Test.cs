@@ -13,8 +13,8 @@ namespace diplom_mob1
     public class Test : ContentPage
     {
         Entry AnswerTask;
-        Button btnPutTestAnswer, btnStopTestAnswer;
-        Label LabelNameVopros, LabelError, LabelNameTest;
+        Button btnPutTestAnswer;
+        Label LabelNameVopros,LabelNameTest;
         SwitchCell var1, var2, var3, var4;
         TableView Variant;
         Image webImage;
@@ -23,7 +23,7 @@ namespace diplom_mob1
         List<String> TaskList = new List<String>();
 
         int TrueAnswer = 0, Answer = 0, TakeAnswer = 0;
-        float Ocenka = 0F;
+        double Ocenka = 0.000d;
         int i = 7, y = 0, z = 0;
         string[] TextAnswer;
         static public bool TheTaskIs = false;
@@ -42,21 +42,11 @@ namespace diplom_mob1
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
             };
 
-            LabelError = new Label
-            {
-                Text = "Анализ ошибок",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-            };
-
             btnPutTestAnswer = new Button
             {
                 Text = "След вопрос",
             };
 
-            btnStopTestAnswer = new Button
-            {
-                Text = "Закончить тестирование",
-            };
 
 
             AnswerTask = new Entry
@@ -66,7 +56,6 @@ namespace diplom_mob1
 
             Variant = new TableView
             {
-                HasUnevenRows = true,
                 Intent = TableIntent.Menu,
                 Root = new TableRoot
                 {
@@ -74,8 +63,9 @@ namespace diplom_mob1
                     {
                     (var1 = new SwitchCell {  }),
                     (var2 = new SwitchCell {  }),
-                    (var3 = new SwitchCell {  }),
-                    (var4 = new SwitchCell {  })
+                    (var3 = new SwitchCell { }),
+                    (var4 = new SwitchCell {  }),
+
                     }
                 }
 
@@ -139,8 +129,6 @@ namespace diplom_mob1
                     Variant,
                     AnswerTask,
                     btnPutTestAnswer,
-                    btnStopTestAnswer,
-                    LabelError,
 
                 }
             };
@@ -148,13 +136,12 @@ namespace diplom_mob1
 
             ScrollView scrollView = new ScrollView();
             scrollView.Content = stackLayout;
-            this.Content = scrollView;
+            this.Content = stackLayout;
 
 
             TakeTest();
 
             btnPutTestAnswer.Clicked += OnButtonClickedPutTestAnswer;
-            btnStopTestAnswer.Clicked += OnButtonClickedStopTestAnswer;
         }
 
         public async void TakeTest()
@@ -167,8 +154,11 @@ namespace diplom_mob1
             var3.Text = VoprosList[3];
             var4.Text = VoprosList[4];
             TrueAnswer = Convert.ToInt32(VoprosList[5]);
+            if(!String.IsNullOrEmpty(VoprosList[6]))
             webImage.Source = ImageSource.FromUri(new Uri(VoprosList[6]));
-            if (TaskList.Count < 2)
+            else 
+            webImage.Source = ImageSource.FromUri(new Uri("http://imtis.ru/no.jpg"));
+            if (TaskList.Count > 2)
             {
                 TheTaskIs = true;
                 TextAnswer = new string[TaskList.Count / 2];
@@ -176,55 +166,72 @@ namespace diplom_mob1
 
         }
 
-        private void OnButtonClickedPutTestAnswer(object sender, EventArgs e)
+        private async void OnButtonClickedPutTestAnswer(object sender, EventArgs e)
         {
-            if (TrueAnswer == Answer)
-            {
-                TakeAnswer++;
-            }
-
-            else if (Answer == 0)
-                LabelError.Text = "Нужно выбрать ответ!";
-            else
-                LabelError.Text = "Ты поиграл";
-
 
             if (VoprosList.Count > i)
             {
+                if (TrueAnswer == Answer)
+                    TakeAnswer++;
+                if (Answer == 0)
+                    await DisplayAlert("Оповещение", "Нужно выбрать ответ!", "Хорошо");
+
                 LabelNameVopros.Text = VoprosList[0 + i];
                 var1.Text = VoprosList[1 + i];
                 var2.Text = VoprosList[2 + i];
                 var3.Text = VoprosList[3 + i];
                 var4.Text = VoprosList[4 + i];
                 TrueAnswer = Convert.ToInt32(VoprosList[5 + i]);
+                if(!String.IsNullOrEmpty(VoprosList[6 + i]))
                 webImage.Source = ImageSource.FromUri(new Uri(VoprosList[6 + i]));
+                else
+                    webImage.Source = ImageSource.FromUri(new Uri("http://imtis.ru/no.jpg"));
                 i += 7;
             }
             else
             {
-                btnPutTestAnswer.Text = "Решить задачу!";
+
                 if (TaskList.Count > y && TheTaskIs)
                 {
-                    LabelNameVopros.Text = TaskList[0 + y];
-                    webImage.Source = ImageSource.FromUri(new Uri(VoprosList[2 + y]));
-                    Variant.IsVisible = false;
-                    AnswerTask.IsVisible = true;
-                    y += 2;
-                    TextAnswer[z] = AnswerTask.Text;
-                    z++;
+
+                    if (!String.IsNullOrEmpty(AnswerTask.Text))
+                    {
+                        TextAnswer[z] = AnswerTask.Text.ToString();
+                        z++;
+                        y += 2;
+                    }
+                    else
+                        await DisplayAlert("Оповещение", "Нужно заполнить форму ответа на задачу!", "Хорошо");
+
+                    if (TaskList.Count > y && TheTaskIs)
+                    {
+                        btnPutTestAnswer.Text = "Решить задачу!";
+                        Variant.IsVisible = false;
+                        AnswerTask.IsVisible = true;
+                        LabelNameVopros.Text = TaskList[0 + y];
+                        if (!String.IsNullOrEmpty(TaskList[1 + y]))
+                            webImage.Source = ImageSource.FromUri(new Uri(TaskList[1 + y]));
+                        else
+                            webImage.Source = ImageSource.FromUri(new Uri("http://imtis.ru/no.jpg"));
+                    }
+                    else
+                    {
+                        btnPutTestAnswer.Text = "Закончить тестирование!";
+                        Ocenka = (TakeAnswer * 5.000D) / (VoprosList.Count / 7.000D);
+                        DependencyService.Get<IMySQL>().PutAnswerTest(Ocenka, TakeAnswer, TextAnswer);
+                        await Navigation.PopModalAsync();
+                    }
+
                 }
                 else
                 {
                     btnPutTestAnswer.Text = "Закончить тестирование!";
-                    Ocenka = (TakeAnswer * 5) / (VoprosList.Count / 7);
+                    Ocenka = (TakeAnswer * 5.000D) / (VoprosList.Count / 7.000D);
                     DependencyService.Get<IMySQL>().PutAnswerTest(Ocenka, TakeAnswer, TextAnswer);
+                    await Navigation.PopModalAsync();
                 }
 
             }
-        }
-        private async void OnButtonClickedStopTestAnswer(object sender, EventArgs e)
-        {
-            await Navigation.PushModalAsync(new Registration());
         }
     }
 }

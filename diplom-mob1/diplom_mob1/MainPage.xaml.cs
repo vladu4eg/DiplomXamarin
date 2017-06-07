@@ -11,31 +11,13 @@ namespace diplom_mob1
     public partial class MainPage : ContentPage
     {
 
-        Entry loginEntry, passwordEntry;
+        Entry passwordEntry, loginEntry;
         Button btnRegistration, btnLogin;
-        Label Label1, LabelError;
         static public bool AuthStudent = false, AuthTeacher = false;
         public MainPage()
         {
-            Title = "Главная";
+            //BackgroundImage = "BG-SJ.jpg";
 
-            StackLayout stackLayout = new StackLayout();
-            Label1 = new Label
-            {
-                Text = "Добро пожаловать в ад!",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-            };
-
-            loginEntry = new Entry
-            {
-                Placeholder = "Login",
-            };
-
-            passwordEntry = new Entry
-            {
-                Placeholder = "Password",
-                IsPassword = true,
-            };
             btnLogin = new Button
             {
                 Text = "Авторизация",
@@ -44,30 +26,64 @@ namespace diplom_mob1
             {
                 Text = "Регистрация",
             };
-            LabelError = new Label
+
+            loginEntry = new Entry
             {
-                Text = "Анализ ошибок",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                Placeholder = "Введите логин",
+                Keyboard = Keyboard.Default,
+
             };
+            passwordEntry = new Entry
+            {
+                Placeholder = "Введите пароль",
+                Keyboard = Keyboard.Default,
+                IsPassword = true,
+
+            };
+
+            TableView Menu = new TableView
+            {
+                Intent = TableIntent.Form,
+                Root = new TableRoot
+                {
+                new TableSection ("Авторизуйтесь для прохождения тестирования.")
+                    {
+                    (new ViewCell
+                    {
+                        View = loginEntry
+                    }),
+                    (new ViewCell
+                    {
+                        View = passwordEntry
+                    }),
+                    (new ViewCell
+                    {
+                        View = btnLogin
+                    }),
+                    (new ViewCell
+                    {
+                        View = btnRegistration
+                    }),
+
+                    }
+                }
+
+            };
+
+            this.Content = Menu;
+
 
             btnLogin.Clicked += OnButtonClickedLogin;
             btnRegistration.Clicked += OnButtonClickedReg;
 
-
-            stackLayout.Children.Add(Label1);
-            stackLayout.Children.Add(loginEntry);
-            stackLayout.Children.Add(passwordEntry);
-            stackLayout.Children.Add(btnLogin);
-            stackLayout.Children.Add(btnRegistration);
-            stackLayout.Children.Add(LabelError);
-            this.Content = stackLayout;
         }
         private async void OnButtonClickedLogin(object sender, System.EventArgs e)
         {
             //не работает проверка на пустое поле
             if (!String.IsNullOrEmpty(loginEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))
-                LabelError.Text = await DependencyService.Get<IMySQL>().GetAccountAuth(loginEntry.Text, passwordEntry.Text);
-            else LabelError.Text = "Введите логин и пароль!";
+                await DisplayAlert("Оповещение", await DependencyService.Get<IMySQL>().GetAccountAuth(loginEntry.Text, passwordEntry.Text), "Хорошо");
+            else
+                await DisplayAlert("Оповещение", "Введите логин и пароль!", "Хорошо");
 
             if (AuthStudent == true)
             {
@@ -77,7 +93,7 @@ namespace diplom_mob1
             if (AuthTeacher == true)
             {
                 AuthTeacher = false;
-                await Navigation.PushModalAsync(new Teacher());
+                await DisplayAlert("Оповещение", "Вы пытаетесь зайти как преподаватель! Зайдите в свою учетную запись через PC версию программы.", "Хорошо");
             }
         }
 

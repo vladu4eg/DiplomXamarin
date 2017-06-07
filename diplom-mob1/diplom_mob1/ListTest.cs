@@ -26,34 +26,26 @@ namespace diplom_mob1
 
             voidTakeListName();
 
-            List<Name> people = new List<Name>();
+            List<Name> List = new List<Name>();
             // определяем источник данных
             for (int i = 0; (ListName.Count / 3) > i;)
             {
-                people.Add(new Name() { id = Convert.ToInt32(ListName[0 + i]), name = ListName[1 + i], pdf = ListName[2 + i] });
+                List.Add(new Name() { id = Convert.ToInt32(ListName[0 + i]), name = ListName[1 + i], pdf = ListName[2 + i] });
                 i += 3;
             }
-
-
-
-
-
 
             ListView listView = new ListView
             {
                 HasUnevenRows = true,
                 // Определяем источник данных
-                ItemsSource = people,
+                ItemsSource = List,
 
                 // Определяем формат отображения данных
                 ItemTemplate = new DataTemplate(() =>
                 {
-                    // привязка к свойству Name
-                    Label idLabel = new Label();
-                    idLabel.SetBinding(Label.TextProperty, "id");
 
-                    // привязка к свойству Company
-                    Label nameLabel = new Label { FontSize = 18 };
+                    // привязка к свойству name
+                    Label nameLabel = new Label { FontSize = 25 };
                     nameLabel.SetBinding(Label.TextProperty, "name");
 
 
@@ -64,7 +56,7 @@ namespace diplom_mob1
                         {
                             Padding = new Thickness(0, 5),
                             Orientation = StackOrientation.Vertical,
-                            Children = { nameLabel, idLabel }
+                            Children = { nameLabel }
                         }
                     };
                 })
@@ -93,7 +85,7 @@ namespace diplom_mob1
         public async void OnItemTapped(object sender, ItemTappedEventArgs e)
         {
             Name selectedName = e.Item as Name;
-            if (selectedName != null)
+            if (selectedName != null && await DependencyService.Get<IMySQL>().CheckTestForStudent())
             {
                 if (!String.IsNullOrEmpty(selectedName.pdf))
                 {
@@ -107,8 +99,14 @@ namespace diplom_mob1
                 Student.idTest = selectedName.id;
                 await Navigation.PushModalAsync(new Test());
                 ((ListView)sender).SelectedItem = null;
-
             }
+            else
+            {
+                await DisplayAlert("Оповещение", "Вы уже прошли этот тест!", "Хорошо");
+                ((ListView)sender).SelectedItem = null;
+            }
+
+
         }
     }
     class Name

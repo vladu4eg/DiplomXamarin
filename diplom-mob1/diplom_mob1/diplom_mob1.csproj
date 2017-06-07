@@ -58,7 +58,6 @@
     <Compile Include="ResultTest.cs" />
     <Compile Include="ISqLite.cs" />
     <Compile Include="Student.cs" />
-    <Compile Include="Teacher.cs" />
     <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -21,27 +21,52 @@ namespace diplom_mob1.Droid
 {
     public class MySQL : IMySQL
     {
-        public Task<string> GetAccountReg()
+        public async Task<bool> GetAccountReg(string login, string pass, string lastname, string firstname, string middlename, string group, string zachetka)
         {
             try
             {
-                new I18N.West.CP1250();
-                MySqlConnection sqlconn;
-                string connsqlstring = "Server=37.140.192.136;Port=3306;database=u0142932_server;User Id=u0142_server;Password=vlad19957;charset=utf8";
-                sqlconn = new MySqlConnection(connsqlstring);
-                sqlconn.Open();
-                string queryString = "select count(0) from test";
-                MySqlCommand sqlcmd = new MySqlCommand(queryString, sqlconn);
-                String result = sqlcmd.ExecuteScalar().ToString();
-                //LblMsg.Text = result + " accounts in DB";
-                sqlconn.Close();
-                return Task<string>.FromResult(result + " accounts in DB");
+
+                string Connect = "Database=u0354899_diplom;Data Source=31.31.196.162;User Id=u0354899_vlad;Password=vlad19957;charset=cp1251";
+                MySql.Data.MySqlClient.MySqlConnection myConnection = new MySql.Data.MySqlClient.MySqlConnection(Connect);
+                MySql.Data.MySqlClient.MySqlCommand myCommand = new MySql.Data.MySqlClient.MySqlCommand();
+                myConnection.Open();
+                myCommand.Connection = myConnection;
+                myCommand.CommandText = string.Format("INSERT INTO Student (FirstName,LastName,MiddleName,groups,login,password,zachetka) " +
+                                     "VALUES('{0}','{1}','{2}','{3}','{4}','{5}','{6}')", lastname, firstname, middlename, group, login, pass, zachetka);
+                myCommand.Prepare();//подготавливает строку
+                myCommand.ExecuteNonQuery();//выполняет запрос
+                myConnection.Close();
             }
             catch (Exception ex)
             {
-                return Task<string>.FromResult(ex.Message);
+                return await Task<bool>.FromResult(false);
             }
+            return await Task<bool>.FromResult(true);
         }
+
+        public async Task<bool> GetAccountReg(string login, string pass, string lastname, string firstname, string middlename)
+        {
+            try
+            {
+
+                string Connect = "Database=u0354899_diplom;Data Source=31.31.196.162;User Id=u0354899_vlad;Password=vlad19957;charset=cp1251";
+                MySql.Data.MySqlClient.MySqlConnection myConnection = new MySql.Data.MySqlClient.MySqlConnection(Connect);
+                MySql.Data.MySqlClient.MySqlCommand myCommand = new MySql.Data.MySqlClient.MySqlCommand();
+                myConnection.Open();
+                myCommand.Connection = myConnection;
+                myCommand.CommandText = string.Format("INSERT INTO Student (FirstName,LastName,MiddleName,login,password) " +
+                                     "VALUES('{0}','{1}','{2}','{3}','{4}')", lastname, firstname, middlename, login, pass);
+                myCommand.Prepare();//подготавливает строку
+                myCommand.ExecuteNonQuery();//выполняет запрос
+                myConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                return await Task<bool>.FromResult(false);
+            }
+            return await Task<bool>.FromResult(true);
+        }
+
 
         public async Task<string> GetAccountAuth(string login, string pass)
         {
@@ -131,6 +156,36 @@ namespace diplom_mob1.Droid
                 return await Task<List<String>>.FromResult(vopros);
         }
 
+        public async Task<bool> CheckTestForStudent()
+        {
+            bool check = false;
+            int test = 0;
+            try
+            {
+                string Connect = "Database=u0354899_diplom;Data Source=31.31.196.162;User Id=u0354899_vlad;Password=vlad19957;charset=cp1251";
+                MySql.Data.MySqlClient.MySqlConnection myConnection = new MySql.Data.MySqlClient.MySqlConnection(Connect);
+                MySql.Data.MySqlClient.MySqlCommand myCommand = new MySql.Data.MySqlClient.MySqlCommand();
+                myConnection.Open();
+                myCommand.Connection = myConnection;
+                myCommand.CommandText = string.Format("SELECT count(*) From test_history WHERE idstudent = '{0}' AND idtest = '{1}'", Student.idStudent, Student.idTest);//запрос: если есть такой логин в таблице
+                myCommand.Prepare();//подготавливает строку
+                myCommand.ExecuteNonQuery();//выполняет запрос
+                test = Convert.ToInt32(myCommand.ExecuteScalar()) ;//результат запроса
+
+                if(test == 0)
+                {
+                    check = true;
+                }
+
+                myConnection.Close();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message);
+            }
+            return await Task<bool>.FromResult(check);
+        }
+
 
         public async Task<List<string>> GetTakeNameTest()
         {
@@ -162,7 +217,7 @@ namespace diplom_mob1.Droid
             return await Task<List<string>>.FromResult(vopros);
         }
 
-        public void PutAnswerTest(float ocenka, int answer, string[] answer_task)
+        public void PutAnswerTest(double ocenka, int answer, string[] answer_task)
         {
             try
             {
@@ -175,11 +230,11 @@ namespace diplom_mob1.Droid
                 myCommand.CommandText = string.Format("INSERT INTO test_history (idstudent,idtest,ocenka,true_quest) VALUES ('{0}','{1}','{2}','{3}')", Student.idStudent,Student.idTest, ocenka, answer);//запрос: если есть такой логин в таблице
                 myCommand.Prepare();//подготавливает строку
                 myCommand.ExecuteNonQuery();//выполняет запрос
+                int idTestH = (int)myCommand.LastInsertedId;//результат запроса
                 if (Test.TheTaskIs)
                 {   
                     foreach(string str in answer_task)
                     {
-                        int idTestH = (int)myCommand.LastInsertedId;//результат запроса
                         myCommand.CommandText = string.Format("INSERT INTO task_history (idstudent,idtest,idhistory_quest,answer) VALUES ('{0}','{1}','{2}','{3}')", Student.idStudent, Student.idTest, idTestH, str);//запрос: если есть такой логин в таблице
                         myCommand.Prepare();//подготавливает строку
                         myCommand.ExecuteNonQuery();//выполняет запрос
@@ -215,7 +270,7 @@ namespace diplom_mob1.Droid
             }
         }
 
-        public async Task<List<String>> GetNameId(int idtest)
+        public async Task<List<String>> GetResult()
         {
             List<String> ListNameId = new List<String>();
             try
@@ -225,7 +280,7 @@ namespace diplom_mob1.Droid
                 sqlconn.Open();
 
                 DataSet tickets = new DataSet();
-                string queryString = string.Format("select id,NameTest,pdf from tests where id = '{0}'", idtest);
+                string queryString = string.Format("select tests.NameTest,test_history.ocenka,test_history.true_quest from tests,test_history where test_history.idstudent = '{0}'", Student.idStudent);
                 MySqlDataAdapter adapter = new MySqlDataAdapter(queryString, sqlconn);
                 adapter.Fill(tickets, "Item");
 
