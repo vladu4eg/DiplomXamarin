@@ -14,7 +14,7 @@ namespace diplom_mob1
     {
         Entry AnswerTask;
         Button btnPutTestAnswer;
-        Label LabelNameVopros,LabelNameTest;
+        Label LabelNameVopros, LabelNameTest;
         SwitchCell var1, var2, var3, var4;
         TableView Variant;
         Image webImage;
@@ -22,8 +22,7 @@ namespace diplom_mob1
         List<String> VoprosList = new List<String>();
         List<String> TaskList = new List<String>();
 
-        int TrueAnswer = 0, Answer = 0, TakeAnswer = 0;
-        double Ocenka = 0.000d;
+        int TrueAnswer = 0, FalseAnswer = 0, Answer = 0, TakeAnswer = 0;
         int i = 7, y = 0, z = 0;
         string[] TextAnswer;
         static public bool TheTaskIs = false;
@@ -154,10 +153,10 @@ namespace diplom_mob1
             var3.Text = VoprosList[3];
             var4.Text = VoprosList[4];
             TrueAnswer = Convert.ToInt32(VoprosList[5]);
-            if(!String.IsNullOrEmpty(VoprosList[6]))
-            webImage.Source = ImageSource.FromUri(new Uri(VoprosList[6]));
-            else 
-            webImage.Source = ImageSource.FromUri(new Uri("http://imtis.ru/no.jpg"));
+            if (!String.IsNullOrEmpty(VoprosList[6]))
+                webImage.Source = ImageSource.FromUri(new Uri(VoprosList[6]));
+            else
+                webImage.Source = ImageSource.FromUri(new Uri("http://imtis.ru/no.jpg"));
             if (TaskList.Count > 2)
             {
                 TheTaskIs = true;
@@ -173,8 +172,10 @@ namespace diplom_mob1
             {
                 if (TrueAnswer == Answer)
                     TakeAnswer++;
-                if (Answer == 0)
+                else if (Answer == 0)
                     await DisplayAlert("Оповещение", "Нужно выбрать ответ!", "Хорошо");
+                else
+                    FalseAnswer++;
 
                 LabelNameVopros.Text = VoprosList[0 + i];
                 var1.Text = VoprosList[1 + i];
@@ -182,8 +183,8 @@ namespace diplom_mob1
                 var3.Text = VoprosList[3 + i];
                 var4.Text = VoprosList[4 + i];
                 TrueAnswer = Convert.ToInt32(VoprosList[5 + i]);
-                if(!String.IsNullOrEmpty(VoprosList[6 + i]))
-                webImage.Source = ImageSource.FromUri(new Uri(VoprosList[6 + i]));
+                if (!String.IsNullOrEmpty(VoprosList[6 + i]))
+                    webImage.Source = ImageSource.FromUri(new Uri(VoprosList[6 + i]));
                 else
                     webImage.Source = ImageSource.FromUri(new Uri("http://imtis.ru/no.jpg"));
                 i += 7;
@@ -217,8 +218,7 @@ namespace diplom_mob1
                     else
                     {
                         btnPutTestAnswer.Text = "Закончить тестирование!";
-                        Ocenka = (TakeAnswer * 5.000D) / (VoprosList.Count / 7.000D);
-                        DependencyService.Get<IMySQL>().PutAnswerTest(Ocenka, TakeAnswer, TextAnswer);
+                        DependencyService.Get<IMySQL>().PutAnswerTest(FalseAnswer, TakeAnswer, TextAnswer);
                         await Navigation.PopModalAsync();
                     }
 
@@ -226,8 +226,7 @@ namespace diplom_mob1
                 else
                 {
                     btnPutTestAnswer.Text = "Закончить тестирование!";
-                    Ocenka = (TakeAnswer * 5.000D) / (VoprosList.Count / 7.000D);
-                    DependencyService.Get<IMySQL>().PutAnswerTest(Ocenka, TakeAnswer, TextAnswer);
+                    DependencyService.Get<IMySQL>().PutAnswerTest(FalseAnswer, TakeAnswer, TextAnswer);
                     await Navigation.PopModalAsync();
                 }
 

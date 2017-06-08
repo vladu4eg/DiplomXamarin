@@ -20,6 +20,26 @@ namespace diplom_mob1
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 HorizontalOptions = LayoutOptions.Center
             };
+            Label namet = new Label
+            {
+                Text = "Название темы:",
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+            };
+            Label tq = new Label
+            {
+                Text = "Правильные ответы:",
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+            };
+            Label fq = new Label
+            {
+                Text = "Неправильные ответы:",
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+            };
+            Label ocenkalab = new Label
+            {
+                Text = "Оценка:",
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+            };
 
             voidResultListName();
 
@@ -27,13 +47,15 @@ namespace diplom_mob1
             // определяем источник данных
             for (int i = 0; ListName.Count > i;)
             {
-                result.Add(new Result() { name = ListName[0 + i], ocenka = Convert.ToInt32(ListName[1 + i]) , true_quest = Convert.ToInt32(ListName[2 + i] )});
-                i += 3;
+                result.Add(new Result() { name = ListName[0 + i], false_quest = Convert.ToInt32(ListName[1 + i]) , true_quest = Convert.ToInt32(ListName[2 + i]), ocenka = Convert.ToInt32(ListName[3 + i] ) });
+                i += 4;
             }
 
             ListView listView = new ListView
             {
                 HasUnevenRows = true,
+                SeparatorColor = Color.Red,
+                
                 // Определяем источник данных
                 ItemsSource = result,
 
@@ -41,16 +63,20 @@ namespace diplom_mob1
                 ItemTemplate = new DataTemplate(() =>
                 {
                     // привязка к свойству Company
-                    Label nameLabel = new Label { FontSize = 20 };
+                    Label nameLabel = new Label { FontSize = 25, TextColor = Color.Blue};
                     nameLabel.SetBinding(Label.TextProperty, "name");
 
                     // привязка к свойству Name
-                    Label ocenkaLabel = new Label { FontSize = 18 };
-                    ocenkaLabel.SetBinding(Label.TextProperty, "ocenka");
+                    Label false_quest = new Label { FontSize = 25, TextColor = Color.Blue };
+                    false_quest.SetBinding(Label.TextProperty, "false_quest");
 
                     // привязка к свойству Name
-                    Label true_questLabel = new Label();
+                    Label true_questLabel = new Label { FontSize = 25, TextColor = Color.Blue };
                     true_questLabel.SetBinding(Label.TextProperty, "true_quest");
+
+                    // привязка к свойству Name
+                    Label ocenkaLabel = new Label { FontSize = 25, TextColor = Color.Blue };
+                    ocenkaLabel.SetBinding(Label.TextProperty, "ocenka");
 
 
 
@@ -61,7 +87,7 @@ namespace diplom_mob1
                         {
                             Padding = new Thickness(0, 5),
                             Orientation = StackOrientation.Vertical,
-                            Children = { nameLabel, ocenkaLabel, true_questLabel }
+                            Children = { namet, nameLabel, fq, false_quest, tq, true_questLabel, ocenkalab, ocenkaLabel }
                         }
                     };
                 })
@@ -88,8 +114,9 @@ namespace diplom_mob1
         class Result
         {
             public string name { get; set; }
-            public float ocenka { get; set; }
+            public int false_quest { get; set; }
             public int true_quest { get; set; }
+            public int ocenka { get; set; }
         }
     }
 }

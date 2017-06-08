@@ -85,26 +85,26 @@ namespace diplom_mob1
         public async void OnItemTapped(object sender, ItemTappedEventArgs e)
         {
             Name selectedName = e.Item as Name;
-            if (selectedName != null && await DependencyService.Get<IMySQL>().CheckTestForStudent())
+            if (selectedName != null)
             {
+                Student.NameTest = selectedName.name;
+                Student.idTest = selectedName.id;
+
                 if (!String.IsNullOrEmpty(selectedName.pdf))
                 {
                     bool result = await DisplayAlert("Подтвердить действие", "Вы хотите прочитать методические указания к работе?", "Да", "Нет");
+
                     if (result)
-                    {
                         Device.OpenUri(new Uri(selectedName.pdf));
-                    }
                 }
-                Student.NameTest = selectedName.name;
-                Student.idTest = selectedName.id;
-                await Navigation.PushModalAsync(new Test());
+                if (await DependencyService.Get<IMySQL>().CheckTestForStudent())
+                    await Navigation.PushModalAsync(new Test());
+                else
+                    await DisplayAlert("Оповещение", "Вы уже прошли этот тест!", "Хорошо");
                 ((ListView)sender).SelectedItem = null;
             }
             else
-            {
-                await DisplayAlert("Оповещение", "Вы уже прошли этот тест!", "Хорошо");
                 ((ListView)sender).SelectedItem = null;
-            }
 
 
         }

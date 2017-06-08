@@ -18,7 +18,7 @@ namespace diplom_mob1
         Task<List<string>> GetTakeNameTest();
         Task<List<string>> GetResult();
         Task<bool> CheckTestForStudent();
-        void PutAnswerTest(double ocenka, int answer, string[] answer_task);
+        void PutAnswerTest(int trueanswer, int answer, string[] answer_task);
         void PutTakeStudentTest(int idtest, int idstudent);
 
     }

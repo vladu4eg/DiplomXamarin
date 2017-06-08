@@ -172,10 +172,12 @@ namespace diplom_mob1.Droid
                 myCommand.ExecuteNonQuery();//выполняет запрос
                 test = Convert.ToInt32(myCommand.ExecuteScalar()) ;//результат запроса
 
-                if(test == 0)
+                if (test == 0)
                 {
                     check = true;
                 }
+                else
+                    check = false;
 
                 myConnection.Close();
             }
@@ -217,7 +219,7 @@ namespace diplom_mob1.Droid
             return await Task<List<string>>.FromResult(vopros);
         }
 
-        public void PutAnswerTest(double ocenka, int answer, string[] answer_task)
+        public void PutAnswerTest(int trueanswer, int answer, string[] answer_task)
         {
             try
             {
@@ -227,7 +229,7 @@ namespace diplom_mob1.Droid
                 MySql.Data.MySqlClient.MySqlCommand myCommand = new MySql.Data.MySqlClient.MySqlCommand();
                 myConnection.Open();
                 myCommand.Connection = myConnection;
-                myCommand.CommandText = string.Format("INSERT INTO test_history (idstudent,idtest,ocenka,true_quest) VALUES ('{0}','{1}','{2}','{3}')", Student.idStudent,Student.idTest, ocenka, answer);//запрос: если есть такой логин в таблице
+                myCommand.CommandText = string.Format("INSERT INTO test_history (idstudent,idtest,false_quest,true_quest) VALUES ('{0}','{1}','{2}','{3}')", Student.idStudent,Student.idTest, trueanswer, answer);//запрос: если есть такой логин в таблице
                 myCommand.Prepare();//подготавливает строку
                 myCommand.ExecuteNonQuery();//выполняет запрос
                 int idTestH = (int)myCommand.LastInsertedId;//результат запроса
@@ -280,7 +282,7 @@ namespace diplom_mob1.Droid
                 sqlconn.Open();
 
                 DataSet tickets = new DataSet();
-                string queryString = string.Format("select tests.NameTest,test_history.ocenka,test_history.true_quest from tests,test_history where test_history.idstudent = '{0}'", Student.idStudent);
+                string queryString = string.Format("select tests.NameTest,test_history.false_quest,test_history.true_quest, test_history.ocenka from tests,test_history where test_history.idstudent = '{0}' AND test_history.idtest = tests.id", Student.idStudent);
                 MySqlDataAdapter adapter = new MySqlDataAdapter(queryString, sqlconn);
                 adapter.Fill(tickets, "Item");
 
@@ -289,6 +291,7 @@ namespace diplom_mob1.Droid
                     ListNameId.Add(row[0].ToString());
                     ListNameId.Add(row[1].ToString());
                     ListNameId.Add(row[2].ToString());
+                    ListNameId.Add(row[3].ToString());
                 }
 
 
