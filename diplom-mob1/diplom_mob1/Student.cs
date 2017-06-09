@@ -4,14 +4,12 @@ namespace diplom_mob1
     public class Student : ContentPage
     {
         StackLayout stackLayout = new StackLayout();
-        Button btnTakeTest, btnTest, btnResultTest, btnExit;
+        Button btnTakeTest, btnTest, btnResultTest;
         static public int idTest, idStudent;
         static public string NameTest;
 
         public Student()
         {
-            
-
             Title = "Главная страница";
             btnTakeTest = new Button
             {
@@ -25,36 +23,27 @@ namespace diplom_mob1
             {
                 Text = "Результаты тестов",
             };
-            btnExit = new Button
-            {
-                Text = "Выход",
-            };
 
             btnTakeTest.Clicked += OnButtonClickedTakeTest;
             btnTest.Clicked += OnButtonClickedTest;
             btnResultTest.Clicked += OnButtonClickedResultTest;
-            btnExit.Clicked += OnButtonClickedExit;
             stackLayout.Children.Add(btnTakeTest);
             stackLayout.Children.Add(btnTest);
             stackLayout.Children.Add(btnResultTest);
 
             this.Content = stackLayout;
         }
-        private async void OnButtonClickedTakeTest(object sender, System.EventArgs e)
+        private void OnButtonClickedTakeTest(object sender, System.EventArgs e)
         {
-            await Navigation.PushModalAsync(new QRScanner());
+             Navigation.PushAsync(new QRScanner());
         }
-        private async void OnButtonClickedTest(object sender, System.EventArgs e)
+        private void OnButtonClickedTest(object sender, System.EventArgs e)
         {
-            await Navigation.PushModalAsync(new ListTest());
+            Navigation.PushAsync(new ListTest());
         }
-        private async void OnButtonClickedResultTest(object sender, System.EventArgs e)
+        private void OnButtonClickedResultTest(object sender, System.EventArgs e)
         {
-            await Navigation.PushModalAsync(new ResultTest());
-        }
-        private async void OnButtonClickedExit(object sender, System.EventArgs e)
-        {
-            await Navigation.PopModalAsync();
+             Navigation.PushAsync(new ResultTest());
         }
     }
 }

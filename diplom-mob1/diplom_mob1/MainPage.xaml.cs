@@ -9,8 +9,7 @@ namespace diplom_mob1
         static public bool AuthStudent = false, AuthTeacher = false;
         public MainPage()
         {
-            InitializeComponent();
-
+            Title = "Вход";
             btnLogin = new Button
             {
                 Text = "Авторизация",
@@ -67,7 +66,7 @@ namespace diplom_mob1
             if (AuthStudent == true)
             {
                 AuthStudent = false;
-                await Navigation.PushModalAsync(new Student { });
+               await Navigation.PushAsync(new Student ());
             }
             if (AuthTeacher == true)
             {
@@ -76,9 +75,9 @@ namespace diplom_mob1
             }
         }
 
-        private async void OnButtonClickedReg(object sender, EventArgs e)
+        private void OnButtonClickedReg(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new Registration());
+             Navigation.PushAsync(new Registration());
         }
     }
 }

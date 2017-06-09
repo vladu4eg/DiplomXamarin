@@ -82,11 +82,17 @@ namespace diplom_mob1
                 }
             };
             this.Content = stackLayout;
+            listView.ItemTapped += OnItemTapped;
         }
 
         public async void voidResultListName()
         {
             ListName = await DependencyService.Get<IMySQL>().GetResult();
+        }
+
+        public void OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+                ((ListView)sender).SelectedItem = null;
         }
 
         class Result

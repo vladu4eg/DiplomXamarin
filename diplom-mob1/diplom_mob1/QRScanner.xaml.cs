@@ -14,6 +14,7 @@ namespace diplom_mob1
         Button btnBack;
         public QRScanner() : base()
         {
+            Title = "Сканирование QR-кода";
             StackLayout stackLayout = new StackLayout();
             List<String> ListNameId = new List<String>();
 
@@ -57,9 +58,9 @@ namespace diplom_mob1
             stackLayout.Children.Add(btnBack);
             this.Content = stackLayout;
         }
-        private async void btnBack_Click(object sender, EventArgs e)
+        private void btnBack_Click(object sender, EventArgs e)
         {
-            await Navigation.PopModalAsync();
+             Navigation.PopModalAsync();
         }
 
         protected override void OnAppearing()
