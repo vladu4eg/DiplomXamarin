@@ -1,27 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-
 namespace diplom_mob1
 {
     public partial class MainPage : ContentPage
     {
-
         Entry passwordEntry, loginEntry;
         Button btnRegistration, btnLogin;
         static public bool AuthStudent = false, AuthTeacher = false;
         public MainPage()
         {
-            //BackgroundImage = "BG-SJ.jpg";
+            InitializeComponent();
 
             btnLogin = new Button
             {
                 Text = "Авторизация",
             };
+
             btnRegistration = new Button
             {
                 Text = "Регистрация",
@@ -33,6 +27,7 @@ namespace diplom_mob1
                 Keyboard = Keyboard.Default,
 
             };
+
             passwordEntry = new Entry
             {
                 Placeholder = "Введите пароль",
@@ -48,38 +43,22 @@ namespace diplom_mob1
                 {
                 new TableSection ("Авторизуйтесь для прохождения тестирования.")
                     {
-                    (new ViewCell
-                    {
-                        View = loginEntry
-                    }),
-                    (new ViewCell
-                    {
-                        View = passwordEntry
-                    }),
-                    (new ViewCell
-                    {
-                        View = btnLogin
-                    }),
-                    (new ViewCell
-                    {
-                        View = btnRegistration
-                    }),
-
+                    (new ViewCell { View = loginEntry } ),
+                    (new ViewCell { View = passwordEntry } ),
+                    (new ViewCell { View = btnLogin } ),
+                    (new ViewCell{ View = btnRegistration } ),
                     }
                 }
-
             };
 
             this.Content = Menu;
 
-
             btnLogin.Clicked += OnButtonClickedLogin;
             btnRegistration.Clicked += OnButtonClickedReg;
-
         }
+
         private async void OnButtonClickedLogin(object sender, System.EventArgs e)
         {
-            //не работает проверка на пустое поле
             if (!String.IsNullOrEmpty(loginEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))
                 await DisplayAlert("Оповещение", await DependencyService.Get<IMySQL>().GetAccountAuth(loginEntry.Text, passwordEntry.Text), "Хорошо");
             else
@@ -88,7 +67,7 @@ namespace diplom_mob1
             if (AuthStudent == true)
             {
                 AuthStudent = false;
-                await Navigation.PushModalAsync(new Student());
+                await Navigation.PushModalAsync(new Student { });
             }
             if (AuthTeacher == true)
             {

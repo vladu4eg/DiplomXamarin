@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Diagnostics;
-
 using Xamarin.Forms;
-
 namespace diplom_mob1
 {
     public class Test : ContentPage
@@ -29,6 +22,7 @@ namespace diplom_mob1
 
         public Test()
         {
+            Title = "";
             LabelNameTest = new Label
             {
                 Text = Student.NameTest,
@@ -45,8 +39,6 @@ namespace diplom_mob1
             {
                 Text = "След вопрос",
             };
-
-
 
             AnswerTask = new Entry
             {
@@ -69,10 +61,7 @@ namespace diplom_mob1
                 }
 
             };
-
             webImage = new Image { Aspect = Aspect.AspectFit };
-            //webImage.Source = ImageSource.FromUri(new Uri("https://xamarin.com/content/images/pages/forms/example-app.png"));
-
             var1.OnChanged += (s, e) =>
             {
                 if (var1.On == true)
@@ -114,10 +103,6 @@ namespace diplom_mob1
                     Answer = 4;
                 }
             };
-
-            // var scroll = new ScrollView();
-            //  Content = scroll;
-
             StackLayout stackLayout = new StackLayout
             {
                 Children =
@@ -132,14 +117,11 @@ namespace diplom_mob1
                 }
             };
 
-
             ScrollView scrollView = new ScrollView();
             scrollView.Content = stackLayout;
             this.Content = stackLayout;
 
-
             TakeTest();
-
             btnPutTestAnswer.Clicked += OnButtonClickedPutTestAnswer;
         }
 
@@ -162,12 +144,10 @@ namespace diplom_mob1
                 TheTaskIs = true;
                 TextAnswer = new string[TaskList.Count / 2];
             }
-
         }
 
         private async void OnButtonClickedPutTestAnswer(object sender, EventArgs e)
         {
-
             if (VoprosList.Count > i)
             {
                 if (TrueAnswer == Answer)
@@ -191,10 +171,8 @@ namespace diplom_mob1
             }
             else
             {
-
                 if (TaskList.Count > y && TheTaskIs)
                 {
-
                     if (!String.IsNullOrEmpty(AnswerTask.Text))
                     {
                         TextAnswer[z] = AnswerTask.Text.ToString();
@@ -221,7 +199,6 @@ namespace diplom_mob1
                         DependencyService.Get<IMySQL>().PutAnswerTest(FalseAnswer, TakeAnswer, TextAnswer);
                         await Navigation.PopModalAsync();
                     }
-
                 }
                 else
                 {
@@ -229,7 +206,6 @@ namespace diplom_mob1
                     DependencyService.Get<IMySQL>().PutAnswerTest(FalseAnswer, TakeAnswer, TextAnswer);
                     await Navigation.PopModalAsync();
                 }
-
             }
         }
     }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace diplom_mob1
@@ -20,7 +15,5 @@ namespace diplom_mob1
         Task<bool> CheckTestForStudent();
         void PutAnswerTest(int trueanswer, int answer, string[] answer_task);
         void PutTakeStudentTest(int idtest, int idstudent);
-
     }
-
 }

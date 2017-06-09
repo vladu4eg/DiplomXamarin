@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-
-using Xamarin.Forms;
-
+﻿using Xamarin.Forms;
 namespace diplom_mob1
 {
     public class Student : ContentPage
     {
-        Button btnTakeTest, btnTest, btnResultTest;
+        StackLayout stackLayout = new StackLayout();
+        Button btnTakeTest, btnTest, btnResultTest, btnExit;
         static public int idTest, idStudent;
         static public string NameTest;
 
         public Student()
         {
-            StackLayout stackLayout = new StackLayout();
+            
 
+            Title = "Главная страница";
             btnTakeTest = new Button
             {
                 Text = "Получить тест",
@@ -30,12 +25,15 @@ namespace diplom_mob1
             {
                 Text = "Результаты тестов",
             };
-
+            btnExit = new Button
+            {
+                Text = "Выход",
+            };
 
             btnTakeTest.Clicked += OnButtonClickedTakeTest;
             btnTest.Clicked += OnButtonClickedTest;
             btnResultTest.Clicked += OnButtonClickedResultTest;
-
+            btnExit.Clicked += OnButtonClickedExit;
             stackLayout.Children.Add(btnTakeTest);
             stackLayout.Children.Add(btnTest);
             stackLayout.Children.Add(btnResultTest);
@@ -53,6 +51,10 @@ namespace diplom_mob1
         private async void OnButtonClickedResultTest(object sender, System.EventArgs e)
         {
             await Navigation.PushModalAsync(new ResultTest());
+        }
+        private async void OnButtonClickedExit(object sender, System.EventArgs e)
+        {
+            await Navigation.PopModalAsync();
         }
     }
 }

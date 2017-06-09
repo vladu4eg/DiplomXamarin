@@ -28,7 +28,7 @@ namespace diplom_mob1
         {
             InitializeComponent();
 
-            MainPage = new diplom_mob1.MainPage();
+            MainPage = new MainPage();
         }
 
         protected override void OnStart()

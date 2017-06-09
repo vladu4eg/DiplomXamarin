@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-
 using Xamarin.Forms;
-//ПЕРЕДЕЛАТЬ СПИСОК РЕЗУЛЬТАТОВ!!!!
 namespace diplom_mob1
 {
     public class ResultTest : ContentPage
@@ -14,12 +9,8 @@ namespace diplom_mob1
 
         public ResultTest()
         {
-            Label header = new Label
-            {
-                Text = "Список результатов",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                HorizontalOptions = LayoutOptions.Center
-            };
+            Title = "Список результатов";
+
             Label namet = new Label
             {
                 Text = "Название темы:",
@@ -44,7 +35,6 @@ namespace diplom_mob1
             voidResultListName();
 
             List<Result> result = new List<Result>();
-            // определяем источник данных
             for (int i = 0; ListName.Count > i;)
             {
                 result.Add(new Result() { name = ListName[0 + i], false_quest = Convert.ToInt32(ListName[1 + i]) , true_quest = Convert.ToInt32(ListName[2 + i]), ocenka = Convert.ToInt32(ListName[3 + i] ) });
@@ -55,31 +45,22 @@ namespace diplom_mob1
             {
                 HasUnevenRows = true,
                 SeparatorColor = Color.Red,
-                
-                // Определяем источник данных
                 ItemsSource = result,
-
                 // Определяем формат отображения данных
                 ItemTemplate = new DataTemplate(() =>
                 {
-                    // привязка к свойству Company
+                    // привязка к свойству name
                     Label nameLabel = new Label { FontSize = 25, TextColor = Color.Blue};
                     nameLabel.SetBinding(Label.TextProperty, "name");
-
-                    // привязка к свойству Name
+                    // привязка к свойству false_quest
                     Label false_quest = new Label { FontSize = 25, TextColor = Color.Blue };
                     false_quest.SetBinding(Label.TextProperty, "false_quest");
-
-                    // привязка к свойству Name
+                    // привязка к свойству true_quest
                     Label true_questLabel = new Label { FontSize = 25, TextColor = Color.Blue };
                     true_questLabel.SetBinding(Label.TextProperty, "true_quest");
-
-                    // привязка к свойству Name
+                    // привязка к свойству ocenka
                     Label ocenkaLabel = new Label { FontSize = 25, TextColor = Color.Blue };
                     ocenkaLabel.SetBinding(Label.TextProperty, "ocenka");
-
-
-
                     // создаем объект ViewCell.
                     return new ViewCell
                     {
@@ -97,20 +78,17 @@ namespace diplom_mob1
             {
                 Children =
                 {
-                header,
-                listView,
-                
+                listView,             
                 }
             };
-
             this.Content = stackLayout;
         }
-
 
         public async void voidResultListName()
         {
             ListName = await DependencyService.Get<IMySQL>().GetResult();
         }
+
         class Result
         {
             public string name { get; set; }

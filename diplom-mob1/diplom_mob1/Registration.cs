@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace diplom_mob1
 {
@@ -18,7 +12,7 @@ namespace diplom_mob1
 
         public Registration()
         {
-
+            Title = "Регистрация";
             btnReg = new Button
             {
                 Text = "Зарегистрироваться!",
@@ -28,7 +22,6 @@ namespace diplom_mob1
                 TextColor = Color.Red,
                 FontSize = 20
             };
-
             RegMenu = new TableView
             {
                 Intent = TableIntent.Menu,
@@ -36,29 +29,19 @@ namespace diplom_mob1
                 {
                 new TableSection ("Регистрация")
                     {
-                    (var1 = new SwitchCell { Text = "Вы преподаватель?" }),
-                    (Login = new EntryCell {
-                            Label = "Логин:"}),
-                    (pass1 = new EntryCell {
-                            Label = "Пароль:"}),
-                    (pass2 = new EntryCell {
-                            Label = "Пароль:",
-                            Placeholder = "Еще раз" }),
-                    (LastName = new EntryCell {
-                            Label = "Фамилия:"}),
-                    (FirstName = new EntryCell {
-                            Label = "Имя:"}),
-                    (MiddleName = new EntryCell {
-                            Label = "Отчество:"}),
-                    (Group = new EntryCell {
-                            Label = "Группа:"}),
-                    (zachetka = new EntryCell {
-                            Label = "Номер зачетки:"}),
-                     (new ViewCell { View = btnReg }),
-                     (new ViewCell { View = ErrorLabel}),
+                    (var1 = new SwitchCell { Text = "Вы преподаватель?" } ),
+                    (Login = new EntryCell { Label = "Логин:"} ),
+                    (pass1 = new EntryCell { Label = "Пароль:"} ),
+                    (pass2 = new EntryCell { Label = "Пароль:", Placeholder = "Еще раз" } ),
+                    (LastName = new EntryCell { Label = "Фамилия:"} ),
+                    (FirstName = new EntryCell { Label = "Имя:"} ),
+                    (MiddleName = new EntryCell { Label = "Отчество:"} ),
+                    (Group = new EntryCell { Label = "Группа:"} ),
+                    (zachetka = new EntryCell { Label = "Номер зачетки:"} ),
+                    (new ViewCell { View = btnReg }),
+                    (new ViewCell { View = ErrorLabel}),
                     }
                 }
-
             };
 
             var1.OnChanged += (s, e) =>
@@ -76,13 +59,10 @@ namespace diplom_mob1
             };
 
             btnReg.Clicked += OnButtonClickedLogin;
-            
             this.Content = RegMenu;
         }
-
         private async void OnButtonClickedLogin(object sender, System.EventArgs e)
         {
-
             if (pass1.Text != pass2.Text)
                 ErrorLabel.Text = "Пароль не совпадает!";
             else if (string.IsNullOrEmpty(Login.Text))
@@ -109,9 +89,7 @@ namespace diplom_mob1
                 }
                 else
                     await DisplayAlert("Оповещение", "Регистрация не прошла", "Хорошо");
-
             }
-
         }
     }
 }

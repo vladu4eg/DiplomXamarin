@@ -1,9 +1,12 @@
-<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/colorPrimary"
+    android:layout_height="match_parent"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    android:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
+    android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    app:popupTheme="@android:drawable/alert_dark_frame"
+    android:background="?attr/colorPrimary" />

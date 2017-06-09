@@ -1,33 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using SQLite;
 using Xamarin.Forms;
 
 namespace diplom_mob1
 {
     public class ListTest : ContentPage
     {
-
         List<string> ListName = new List<string>();
+        List<Name> List = new List<Name>();
+
         public ListTest()
         {
-            Label header = new Label
-            {
-                Text = "Список тестов",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                HorizontalOptions = LayoutOptions.Center
-            };
+            Title = "Список тестов";
 
             voidTakeListName();
 
-            List<Name> List = new List<Name>();
-            // определяем источник данных
             for (int i = 0; (ListName.Count / 3) > i;)
             {
                 List.Add(new Name() { id = Convert.ToInt32(ListName[0 + i]), name = ListName[1 + i], pdf = ListName[2 + i] });
@@ -39,16 +26,12 @@ namespace diplom_mob1
                 HasUnevenRows = true,
                 // Определяем источник данных
                 ItemsSource = List,
-
                 // Определяем формат отображения данных
                 ItemTemplate = new DataTemplate(() =>
                 {
-
                     // привязка к свойству name
                     Label nameLabel = new Label { FontSize = 25 };
                     nameLabel.SetBinding(Label.TextProperty, "name");
-
-
                     // создаем объект ViewCell.
                     return new ViewCell
                     {
@@ -66,15 +49,12 @@ namespace diplom_mob1
             {
                 Children =
                 {
-                header,
                 listView,
                 }
             };
 
             listView.ItemTapped += OnItemTapped;
-
             this.Content = stackLayout;
-
         }
 
         public async void voidTakeListName()
@@ -89,7 +69,6 @@ namespace diplom_mob1
             {
                 Student.NameTest = selectedName.name;
                 Student.idTest = selectedName.id;
-
                 if (!String.IsNullOrEmpty(selectedName.pdf))
                 {
                     bool result = await DisplayAlert("Подтвердить действие", "Вы хотите прочитать методические указания к работе?", "Да", "Нет");
@@ -105,8 +84,6 @@ namespace diplom_mob1
             }
             else
                 ((ListView)sender).SelectedItem = null;
-
-
         }
     }
     class Name
