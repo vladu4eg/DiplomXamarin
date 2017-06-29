@@ -30,7 +30,7 @@ namespace diplom_mob1.Droid
                 MySql.Data.MySqlClient.MySqlCommand myCommand = new MySql.Data.MySqlClient.MySqlCommand();
                 myConnection.Open();
                 myCommand.Connection = myConnection;
-                myCommand.CommandText = string.Format("INSERT INTO Student (FirstName,LastName,MiddleName,groups,login,password,zachetka) " +
+                myCommand.CommandText = string.Format("INSERT INTO Student (LastName,FirstName,MiddleName,groups,login,password,zachetka) " +
                                      "VALUES('{0}','{1}','{2}','{3}','{4}','{5}','{6}')", lastname, firstname, middlename, group, login, pass, zachetka);
                 myCommand.Prepare();//подготавливает строку
                 myCommand.ExecuteNonQuery();//выполняет запрос
@@ -52,7 +52,7 @@ namespace diplom_mob1.Droid
                 MySql.Data.MySqlClient.MySqlCommand myCommand = new MySql.Data.MySqlClient.MySqlCommand();
                 myConnection.Open();
                 myCommand.Connection = myConnection;
-                myCommand.CommandText = string.Format("INSERT INTO Student (FirstName,LastName,MiddleName,login,password) " +
+                myCommand.CommandText = string.Format("INSERT INTO teacher (LastName,FirstName,MiddleName,login,password) " +
                                      "VALUES('{0}','{1}','{2}','{3}','{4}')", lastname, firstname, middlename, login, pass);
                 myCommand.Prepare();//подготавливает строку
                 myCommand.ExecuteNonQuery();//выполняет запрос

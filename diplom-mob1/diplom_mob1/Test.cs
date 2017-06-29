@@ -19,6 +19,7 @@ namespace diplom_mob1
         int i = 7, y = 0, z = 0;
         string[] TextAnswer;
         static public bool TheTaskIs = false;
+        bool AnswerIt = true;
 
         public Test()
         {
@@ -148,7 +149,8 @@ namespace diplom_mob1
 
         private async void OnButtonClickedPutTestAnswer(object sender, EventArgs e)
         {
-            if (VoprosList.Count > i)
+
+            if (VoprosList.Count > i && AnswerIt)
             {
                 if (TrueAnswer == Answer)
                     TakeAnswer++;
@@ -156,6 +158,20 @@ namespace diplom_mob1
                     await DisplayAlert("Оповещение", "Нужно выбрать ответ!", "Хорошо");
                 else
                     FalseAnswer++;
+            }
+            else if (VoprosList.Count == i && AnswerIt)
+            {
+                if (TrueAnswer == Answer)
+                    TakeAnswer++;
+                else if (Answer == 0)
+                    await DisplayAlert("Оповещение", "Нужно выбрать ответ!", "Хорошо");
+                else
+                    FalseAnswer++;
+                AnswerIt = false;
+            }
+
+            if (VoprosList.Count > i)
+            {
 
                 LabelNameVopros.Text = VoprosList[0 + i];
                 var1.Text = VoprosList[1 + i];
@@ -197,14 +213,14 @@ namespace diplom_mob1
                     {
                         btnPutTestAnswer.Text = "Закончить тестирование!";
                         DependencyService.Get<IMySQL>().PutAnswerTest(FalseAnswer, TakeAnswer, TextAnswer);
-                        await Navigation.PopModalAsync();
+                        await Navigation.PopAsync();
                     }
                 }
                 else
                 {
                     btnPutTestAnswer.Text = "Закончить тестирование!";
                     DependencyService.Get<IMySQL>().PutAnswerTest(FalseAnswer, TakeAnswer, TextAnswer);
-                    await Navigation.PopModalAsync();
+                    await Navigation.PopAsync();
                 }
             }
         }

@@ -50,6 +50,8 @@ namespace diplom_mob1
                 {
                     Group.IsEnabled = false;
                     zachetka.IsEnabled = false;
+                    Group.Text = "";
+                    zachetka.Text = "";
                 }
                 else
                 {

@@ -28,7 +28,7 @@ namespace diplom_mob1
                     zxing.IsAnalyzing = false;
                     Student.idTest = Convert.ToInt32(result.Text);
                     DependencyService.Get<IMySQL>().PutTakeStudentTest(Student.idTest, Student.idStudent);
-                    await Navigation.PopModalAsync();
+                    await Navigation.PopAsync();
                 });
 
             overlay = new ZXingDefaultOverlay

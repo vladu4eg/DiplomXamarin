@@ -37,7 +37,6 @@ namespace diplom_mob1
                     {
                         View = new StackLayout
                         {
-                            Padding = new Thickness(0, 5),
                             Orientation = StackOrientation.Vertical,
                             Children = { nameLabel }
                         }
@@ -77,7 +76,7 @@ namespace diplom_mob1
                         Device.OpenUri(new Uri(selectedName.pdf));
                 }
                 if (await DependencyService.Get<IMySQL>().CheckTestForStudent())
-                    await Navigation.PushModalAsync(new Test());
+                    await Navigation.PushAsync(new Test());
                 else
                     await DisplayAlert("Оповещение", "Вы уже прошли этот тест!", "Хорошо");
                 ((ListView)sender).SelectedItem = null;

@@ -50,23 +50,22 @@ namespace diplom_mob1
                 ItemTemplate = new DataTemplate(() =>
                 {
                     // привязка к свойству name
-                    Label nameLabel = new Label { FontSize = 25, TextColor = Color.Blue};
+                    Label nameLabel = new Label { FontSize = 25, TextColor = Color.DodgerBlue};
                     nameLabel.SetBinding(Label.TextProperty, "name");
                     // привязка к свойству false_quest
-                    Label false_quest = new Label { FontSize = 25, TextColor = Color.Blue };
+                    Label false_quest = new Label { FontSize = 25, TextColor = Color.DodgerBlue };
                     false_quest.SetBinding(Label.TextProperty, "false_quest");
                     // привязка к свойству true_quest
-                    Label true_questLabel = new Label { FontSize = 25, TextColor = Color.Blue };
+                    Label true_questLabel = new Label { FontSize = 25, TextColor = Color.DodgerBlue };
                     true_questLabel.SetBinding(Label.TextProperty, "true_quest");
                     // привязка к свойству ocenka
-                    Label ocenkaLabel = new Label { FontSize = 25, TextColor = Color.Blue };
+                    Label ocenkaLabel = new Label { FontSize = 25, TextColor = Color.DodgerBlue };
                     ocenkaLabel.SetBinding(Label.TextProperty, "ocenka");
                     // создаем объект ViewCell.
                     return new ViewCell
                     {
                         View = new StackLayout
                         {
-                            Padding = new Thickness(0, 5),
                             Orientation = StackOrientation.Vertical,
                             Children = { namet, nameLabel, fq, false_quest, tq, true_questLabel, ocenkalab, ocenkaLabel }
                         }
